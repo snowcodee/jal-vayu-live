@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Local Rainfall & Forecast",
+  "description": "A web app showing local rainfall & weather forecast using free weather APIs. Built for a B.Tech Machine Workshop project.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
