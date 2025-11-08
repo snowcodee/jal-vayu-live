@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { fetchWeatherData, fetchLocationName } from './services/weatherService';
 import type { WeatherData } from './types';
@@ -56,6 +57,7 @@ const App: React.FC = () => {
   const [locationName, setLocationName] = useState<string>('');
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getWeatherData = useCallback(() => {
     setStatus('loading');
@@ -133,6 +135,52 @@ const App: React.FC = () => {
     }
   };
 
+  const renderModal = () => {
+    if (!isModalOpen) return null;
+
+    return (
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+        onClick={() => setIsModalOpen(false)} // Close on backdrop click
+      >
+        <div 
+          className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-slate-800 relative transform transition-all animate-fade-in-up"
+          onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+        >
+          <button 
+            onClick={() => setIsModalOpen(false)}
+            className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 transition-colors"
+            aria-label="Close project details"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4 border-b pb-2">JalVayu Live</h2>
+          <div className="space-y-4 text-slate-700">
+            <div>
+              <h3 className="font-bold text-lg text-slate-800">About the Project</h3>
+              <p className="mt-1">
+                This web application provides real-time local weather and rainfall forecasts using live data from weather APIs. It automatically detects the user's location to deliver accurate and current weather information.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg text-slate-800">Group: homiee 6</h3>
+              <ul className="list-disc list-inside mt-1 grid grid-cols-2 gap-x-4">
+                <li>Anmol</li>
+                <li>Piyush</li>
+                <li>Ankit</li>
+                <li>Amit</li>
+                <li>Ashok</li>
+                <li>Ashish</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <main className={`min-h-screen bg-gradient-to-br p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center font-sans transition-colors duration-1000 ${backgroundClass}`}>
       <div className="w-full max-w-4xl">
@@ -142,7 +190,16 @@ const App: React.FC = () => {
         <p>Weather data provided by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Open-Meteo</a>.</p>
         <p>Location data provided by <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">OpenStreetMap</a>.</p>
         <p>By Homiee&lt;&lt;&lt;6</p>
+         <div className="mt-4">
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-full transition-colors"
+          >
+            Project Details
+          </button>
+        </div>
       </footer>
+      {renderModal()}
     </main>
   );
 };
